@@ -89,6 +89,10 @@ function vis_examples {
 $( examplesSeperatorTopLabel "${G_myName}" )
 $( examplesSeperatorChapter "Doom Main Deploy" )
 ${G_myName} ${extraInfo} -i buildInstall
+${G_myName} ${extraInfo} -i doomSync
+${G_myName} ${extraInfo} -i unMain
+${G_myName} ${extraInfo} -i reBuild
+emacs --debug-init  --with-profile blee &
 _EOF_
 }
 
@@ -104,6 +108,33 @@ _CommentBegin_
 *  [[elisp:(org-cycle)][| ]] [[elisp:(org-show-subtree)][|=]] [[elisp:(show-children 10)][|V]] [[elisp:(blee:ppmm:org-mode-toggle)][|N]] [[elisp:(bx:orgm:indirectBufOther)][|>]] [[elisp:(bx:orgm:indirectBufMain)][|I]] [[elisp:(beginning-of-buffer)][|^]] [[elisp:(org-top-overview)][|O]] [[elisp:(progn (org-shifttab) (org-content))][|C]] [[elisp:(delete-other-windows)][|1]] || IIC       ::  buildInstall    [[elisp:(org-cycle)][| ]]
 _CommentEnd_
 
+function vis_reBuild {
+   G_funcEntry
+    function describeF {  G_funcEntryShow; cat  << _EOF_
+_EOF_
+    }
+    EH_assert [[ $# -eq 0 ]]
+
+    lpDo vis_unMain
+    lpDo vis_buildInstall
+
+    lpReturn
+}
+
+
+
+function vis_unMain {
+   G_funcEntry
+    function describeF {  G_funcEntryShow; cat  << _EOF_
+_EOF_
+    }
+    EH_assert [[ $# -eq 0 ]]
+
+    lpDo rm -r -f /bisos/blee/27f/doom-blee-main
+
+    lpReturn
+}
+
 
 function vis_buildInstall {
    G_funcEntry
@@ -112,9 +143,10 @@ _EOF_
     }
     EH_assert [[ $# -eq 0 ]]
 
-    local userHome=$( FN_absolutePathGet ~ )
+    # local userHome=$( FN_absolutePathGet ~ )
     
-    export DOOMDIR="${userHome}/doom-blee"
+    # export DOOMDIR="${userHome}/doom-blee"
+    export DOOMDIR="/bisos/blee/doom-blee-base"
     export YES=y
 
     lpDo mkdir /bisos/blee/27f/doom-blee-main
@@ -125,6 +157,25 @@ _EOF_
     lpDo cp /bisos/blee/doom-blee-init/init.example.el /bisos/blee/27f/doom-blee-main    
 
     lpDo /bisos/blee/27f/doom-blee-main/bin/doom install
+
+    lpReturn
+}
+
+function vis_doomSync {
+   G_funcEntry
+    function describeF {  G_funcEntryShow; cat  << _EOF_
+_EOF_
+    }
+    EH_assert [[ $# -eq 0 ]]
+
+    #local userHome=$( FN_absolutePathGet ~ )
+    
+    #export DOOMDIR="${userHome}/doom-blee"
+    export DOOMDIR="/bisos/blee/doom-blee-base"
+    # export YES=y
+
+
+    lpDo /bisos/blee/27f/doom-blee-main/bin/doom sync
 
     lpReturn
 }	
